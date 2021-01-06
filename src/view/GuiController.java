@@ -19,6 +19,7 @@ import models.Analytic;
 import models.Stock;
 import models.StockList;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -444,32 +445,38 @@ public class GuiController {
 
         getAndDrawDetailsChart.setOnSucceeded((WorkerStateEvent event) -> {
             Double recentTarget;
+            String targetTimeFrame;
             yAxis.setAutoRanging(true);
             xAxis.setAutoRanging(true);
             yAxis.setForceZeroInRange(false);
             lineChart.autosize();
             lineChart.setAnimated(false);
 
-            String[] targetValueholder = tableAnalyticsData.get(0).getTargetValue().split(" ");
-
-            try {
-                recentTarget = Double.parseDouble(targetValueholder[0].replace(",", "."));
-            } catch (NumberFormatException e) {
-                String[] targetValueholder2 = tableAnalyticsData.get(1).getTargetValue().split(" ");
-                 recentTarget = Double.parseDouble(targetValueholder2[0].replace(",", "."));
-            }
-
 
 
             Scene scene = new Scene(lineChart, 800, 600);
             lineChart.getData().add(series);
 
-            XYChart.Series  series1= new XYChart.Series();
-            series1.getData().add(new XYChart.Data("in 12 Monaten", recentTarget));
-            series1.setName("aktuellstes Kursziel");
-            lineChart.getData().add(series1);
+            if (!stock.getAnalytics().isEmpty()) {
+                String[] targetValueholder = tableAnalyticsData.get(0).getTargetValue().split(" ");
 
 
+                try {
+                    targetValueholder[0].replace(",", ".");
+                    targetValueholder[0].replace(".", ",");
+                    recentTarget = Double.parseDouble(targetValueholder[0]);
+                    targetTimeFrame = tableAnalyticsData.get(0).getForcastTimeFrame();
+                } catch (NumberFormatException e) {
+                    String[] targetValueholder2 = tableAnalyticsData.get(1).getTargetValue().split(" ");
+                    recentTarget = Double.parseDouble(targetValueholder2[0].replace(",", ".").replace(".", ","));
+                    targetTimeFrame = tableAnalyticsData.get(1).getForcastTimeFrame();
+                }
+
+                XYChart.Series series1 = new XYChart.Series();
+                series1.getData().add(new XYChart.Data("in "+targetTimeFrame , recentTarget));
+                series1.setName("aktuellstes Kursziel");
+                lineChart.getData().add(series1);
+            }
 
             stage.setScene(scene);
 

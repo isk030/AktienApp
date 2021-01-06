@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +26,7 @@ public class SeleniumService {
         this.options.addArguments("--allow-insecure-content");
         this.options.addArguments("--start-maximized");
         this.options.addArguments("--ignore-certificate-errors");
-        System.setProperty("webdriver.chrome.driver", ".\\src\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         this.chrome1 = new ChromeDriver(options)
 ;
 

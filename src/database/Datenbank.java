@@ -10,7 +10,7 @@ import java.sql.SQLException;
  */
 public class Datenbank extends SQLiteDatenbankverbindung {
 
-    private final static String DBFILE = "src\\stocks2.sqlite";
+    private final static String DBFILE = "stocks2.sqlite";
     private static Datenbank db;
 
     /**

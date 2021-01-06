@@ -1,4 +1,3 @@
-import database.Datenbank;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +20,6 @@ public class Main extends Application {
      * @param args Standard Übergabeparameter als String[]
      */
     public static void main(String[] args) {
-        Datenbank.getInstance();
         launch(args);
     }
 
