@@ -19,8 +19,10 @@ import models.Analytic;
 import models.Stock;
 import models.StockList;
 
+import javax.swing.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -462,14 +464,13 @@ public class GuiController {
 
 
                 try {
-                    targetValueholder[0].replace(",", ".");
-                    targetValueholder[0].replace(".", ",");
-                    recentTarget = Double.parseDouble(targetValueholder[0]);
+                    Number stash = NumberFormat.getInstance(Locale.GERMANY).parse(targetValueholder[0]);
+                    recentTarget = Double.parseDouble(String.valueOf(stash));
                     targetTimeFrame = tableAnalyticsData.get(0).getForcastTimeFrame();
-                } catch (NumberFormatException e) {
-                    String[] targetValueholder2 = tableAnalyticsData.get(1).getTargetValue().split(" ");
-                    recentTarget = Double.parseDouble(targetValueholder2[0].replace(",", ".").replace(".", ","));
-                    targetTimeFrame = tableAnalyticsData.get(1).getForcastTimeFrame();
+                } catch (NumberFormatException | ParseException e) {
+                    recentTarget = null;
+                    targetTimeFrame =  null;
+                    System.out.println("letzte Bewertung hat keinen Wert");
                 }
 
                 XYChart.Series series1 = new XYChart.Series();
