@@ -23,7 +23,7 @@ public class SeleniumService {
     public SeleniumService() {
         this.fetchedLines = new ArrayList<>();
         this.options = new ChromeOptions();
-        this.options.addArguments("--allow-insecure-content");
+        this.options.addArguments("--headless","--allow-insecure-content");
         this.options.addArguments("--start-maximized");
         this.options.addArguments("--ignore-certificate-errors");
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
@@ -74,7 +74,7 @@ public class SeleniumService {
 
         WebElement resultTable = chrome1.findElement(By.tagName("table"));
         List<WebElement> bodyelements = resultTable.findElements(By.xpath("//tbody/tr"));
-        WebElement analyticLink = resultTable.findElement(By.tagName("a"));
+        WebElement analyticLink = null;
 
         for (int i =1; i<bodyelements.size()+1;i++){
             xpathBranche ="//tbody/tr["+i+"]/td[4]";
@@ -82,13 +82,13 @@ public class SeleniumService {
             WebElement checkBranche = resultTable.findElement(By.xpath(xpathBranche));
             String brancheText = checkBranche.getText();
             String camelCasePattern = "[A-Z][A-Z0-9\\s]+"; // 3rd edit, getting better
-            System.out.println(brancheText);
-            if(!brancheText.isEmpty() && !brancheText.matches(camelCasePattern)){
-                analyticLink = resultTable.findElement(By.xpath(xpathName));
-                break;
+            if(!brancheText.isEmpty()){
+                    analyticLink = resultTable.findElement(By.xpath(xpathName));
+                    break;
+            }else{
+                analyticLink= resultTable.findElement(By.tagName("a"));
             }
         }
-
 
 
         wait.until(ExpectedConditions.elementToBeClickable(By.tagName("a")));
