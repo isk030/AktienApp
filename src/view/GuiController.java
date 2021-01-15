@@ -20,15 +20,13 @@ import models.Stock;
 import models.StockList;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Standard GUIController Klasse für die JAVAFx Oberfläche
@@ -81,6 +79,13 @@ public class GuiController {
     @FXML
     private TableView<Analytic> tvAnalytics;
 
+    @FXML
+    private Label lbAnalytics;
+
+    @FXML
+    private ProgressIndicator pbTargets;
+
+
 
     /**
      * Standard initialize() Methode der JavaFx Applikation.
@@ -88,6 +93,8 @@ public class GuiController {
     @FXML
     void initialize() {
         assert tvStock != null : "fx:id=\"tvStock\" was not injected: check your FXML file 'aktienGui.fxml'.";
+        assert pbTargets != null : "fx:id=\"pbTargets\" was not injected: check your FXML file 'aktienGui.fxml'.";
+        assert lbAnalytics != null : "fx:id=\"lbAnalytics\" was not injected: check your FXML file 'aktienGui.fxml'.";
         assert tvAnalytics != null : "fx:id=\"tvAnalytics\" was not injected: check your FXML file 'aktienGui.fxml'.";
         assert btn6mo != null : "fx:id=\"btn6mo\" was not injected: check your FXML file 'aktienGui.fxml'.";
         assert btn1mo != null : "fx:id=\"btn6mo\" was not injected: check your FXML file 'aktienGui.fxml'.";
@@ -292,8 +299,7 @@ public class GuiController {
 
         Task<Void> getSearchResults = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
-
+            protected Void call() throws IOException {
                 DataController.getInstance().getQuerySymbols(queryString);
 
 
@@ -304,7 +310,18 @@ public class GuiController {
             }
         };
 
+        getSearchResults.setOnFailed((WorkerStateEvent event) -> {
+            pbMain.setVisible(false);
+            Alert alert = new Alert((Alert.AlertType.INFORMATION));
+            alert.setHeight(400);
+            alert.setTitle("Suche fehlgeschlagen");
+            alert.setHeaderText(null);
+            alert.setContentText("Suche war erfolglos. Bitte nochmal probieren");
+            alert.showAndWait();
+        });
+
         getSearchResults.setOnSucceeded((WorkerStateEvent event) -> {
+
             pbMain.setVisible(false);
             tvStock.setDisable(false);
         });
@@ -314,13 +331,49 @@ public class GuiController {
 
     @FXML
     void getAnalytics() {
+        lbAnalytics.setText("Analysen werden gesucht...");
         tableAnalyticsData = FXCollections.observableArrayList();
         Stock stock = this.lastfocusedItem;
+        pbTargets.setVisible(true);
 
-        DataController.getInstance().getAnalytics(stock);
+        Task<Void> getTargetResults = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
 
-        tableAnalyticsData.addAll(stock.getAnalytics());
-        tvAnalytics.setItems(tableAnalyticsData);
+                    DataController.getInstance().getAnalytics(stock);
+
+
+                tableAnalyticsData.addAll(stock.getAnalytics());
+                tvAnalytics.setItems(tableAnalyticsData);
+                return null;
+            }
+        };
+
+        getTargetResults.setOnFailed((WorkerStateEvent event) -> {
+            lbAnalytics.setText("Analysen");
+            pbTargets.setVisible(false);
+            Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
+            alert.setHeight(400);
+            alert.setTitle("Kursziele nicht erhalten oder fehlerhaft");
+            alert.setHeaderText(null);
+            alert.setContentText("Abruf von Kurszielen ist fehlgeschlagen. Kursziele entweder nicht vorhanden oder eindeutige Indentifizierung nicht möglich. Nochmal versuchen?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                getAnalytics();
+            }
+        });
+
+        getTargetResults.setOnSucceeded((WorkerStateEvent event) -> {
+            pbTargets.setVisible(false);
+            lbAnalytics.setText("Analysen über: "+stock.getStockName());
+        });
+        new Thread(getTargetResults).start();
+
+
+
+
+
+
     }
 
     /**

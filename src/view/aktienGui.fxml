@@ -43,7 +43,8 @@
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy></TableView>
-      <Label layoutX="1169.0" layoutY="38.0" text="Analysen" />
+      <Label fx:id="lbAnalytics" layoutX="1169.0" layoutY="38.0" text="Analysen" />
       <Button fx:id="btnTarget" layoutX="862.0" layoutY="228.0" mnemonicParsing="false" onAction="#getAnalytics" text="Kursziele anzeigen" />
+      <ProgressIndicator fx:id="pbTargets" layoutX="1402.0" layoutY="25.0" prefHeight="26.0" prefWidth="33.0" visible="false" />
    </Pane>
 </AnchorPane>

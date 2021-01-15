@@ -33,12 +33,6 @@ public class SeleniumService {
         this.wait = new WebDriverWait(chrome1, 30);
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        SeleniumService ss = new SeleniumService();
-        System.out.println(ss.fetchAnalytics("TSLA"));
-        ss.chrome1.close();
-
-    }
 
     private String getAnalytisSite(String symbol) throws InterruptedException {
 
@@ -58,11 +52,14 @@ public class SeleniumService {
 
         button.click();
         chrome1.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        chrome1.switchTo().frame(
-                chrome1.findElement(By.cssSelector("#ur-render-target")));
-        new WebDriverWait(chrome1, 20).until(
-                ExpectedConditions.elementToBeClickable(By
-                        .xpath("//*[@id=\"btn-reject\"]"))).click();
+        try {
+            chrome1.switchTo().frame(
+                    chrome1.findElement(By.cssSelector("#ur-render-target")));
+            new WebDriverWait(chrome1, 20).until(
+                    ExpectedConditions.elementToBeClickable(By
+                            .xpath("//*[@id=\"btn-reject\"]"))).click();
+        }catch (Exception e) {
+        }
 
         // Todo Datenschutz Iframe kommt nicht immer prüfen und dann verfahren (eventuell auch mit Cookiefenster?)
         try {
@@ -72,8 +69,27 @@ public class SeleniumService {
         }catch (Exception e) {
         }
 
+        String xpathBranche;
+        String xpathName;
+
         WebElement resultTable = chrome1.findElement(By.tagName("table"));
+        List<WebElement> bodyelements = resultTable.findElements(By.xpath("//tbody/tr"));
         WebElement analyticLink = resultTable.findElement(By.tagName("a"));
+
+        for (int i =1; i<bodyelements.size()+1;i++){
+            xpathBranche ="//tbody/tr["+i+"]/td[4]";
+            xpathName ="//tbody/tr["+i+"]/td[3]/a";
+            WebElement checkBranche = resultTable.findElement(By.xpath(xpathBranche));
+            String brancheText = checkBranche.getText();
+            String camelCasePattern = "[A-Z][A-Z0-9\\s]+"; // 3rd edit, getting better
+            System.out.println(brancheText);
+            if(!brancheText.isEmpty() && !brancheText.matches(camelCasePattern)){
+                analyticLink = resultTable.findElement(By.xpath(xpathName));
+                break;
+            }
+        }
+
+
 
         wait.until(ExpectedConditions.elementToBeClickable(By.tagName("a")));
 
@@ -89,7 +105,11 @@ public class SeleniumService {
     public ArrayList<HashMap<String,String>> fetchAnalytics(String symbol) throws InterruptedException {
         ArrayList<HashMap<String, String>> analytics = new ArrayList<>();
 
-        chrome1.navigate().to(this.getAnalytisSite(symbol));
+        try {
+            chrome1.navigate().to(this.getAnalytisSite(symbol));
+        }catch (Exception e) {
+            chrome1.close();
+        }
         String languagesParagraphXpath = "//*[@id=\"finanztreff\"]/div[6]/div/div[11]/div/table";
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(languagesParagraphXpath)));
 

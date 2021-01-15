@@ -8,12 +8,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import services.SeleniumService;
 import services.YahooApiService;
+import sun.awt.windows.WPrinterJob;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Die DataController Klasse kümmert sich um die Verknüpftung der Daten mit den jeweiligen Datenmodellen. Sie ruft den
@@ -24,12 +25,14 @@ public class DataController {
     private static DataController singletonDataController = null;
     private StockList stockList;
     private ArrayList<String> queryResults;
+    private SeleniumService seleniumService;
 
     /**
      * Privater Konstruktor des DataController Objekts
      */
     private DataController() {
         this.queryResults = new ArrayList<>();
+
     }
 
     /**
@@ -95,20 +98,15 @@ public class DataController {
     }
 
 
-
     /**
      * Methode um den YahooApiService für allgemeine Aktieninformationen zu starten und die Ergebnisse für
      * Java Objekte zur Verfügung zu stellen.
      *
      * @param symbols Symbol der Aktien, deren Infos abgefragt werden sollen als String
      */
-    public void getStocks(ArrayList<String> symbols) {
+    public void getStocks(ArrayList<String> symbols) throws IOException {
         YahooApiService yahooApiService = new YahooApiService();
-        try {
-            yahooApiService.fetchStocks(symbols);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        yahooApiService.fetchStocks(symbols);
 
         this.setStockList(mapToStockList(yahooApiService.getJsonStockList()));
     }
@@ -133,16 +131,16 @@ public class DataController {
 
     }
 
-    public void getAnalytics(Stock stock) {
-        SeleniumService seleniumService = new SeleniumService();
-
-        try {
-            ArrayList<HashMap<String,String>> analyticsList = seleniumService.fetchAnalytics(stock.getStockName());
+    public void getAnalytics(Stock stock) throws InterruptedException {
+            String cleanName=null;
+            this.seleniumService = new SeleniumService();
+            try{
+                cleanName = stock.getStockName().substring(0,stock.getStockName().indexOf(" "));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            ArrayList<HashMap<String, String>> analyticsList = this.seleniumService.fetchAnalytics(cleanName);
             this.mapAnalyticsIntoModel(analyticsList, stock);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void mapAnalyticsIntoModel(ArrayList<HashMap<String, String>> analyticsList, Stock stock) {
@@ -204,13 +202,9 @@ public class DataController {
      *
      * @param query Suchparameter als String
      */
-    public void getQuerySymbols(String query) {
+    public void getQuerySymbols(String query) throws IOException {
         YahooApiService yahooApiService = new YahooApiService();
-        try {
-            yahooApiService.searchStocks(query);
-        } catch (IOException e) {
-            System.err.println("Kein Ergebnis für Eingabe String");
-        }
+        yahooApiService.searchStocks(query);
         this.queryResults.clear();
 
         JSONArray jsonSearchResult = yahooApiService.getJsonSearchResult();

@@ -85,7 +85,7 @@ public class YahooApiService {
         for (String s : symbols) {
             urlStocks.append(s).append("%2C");
         }
-        urlStocks.append("&region=US");
+        urlStocks.append("&region=DE");
 
         String jsonData = "";
 
@@ -161,7 +161,7 @@ public class YahooApiService {
     public void searchStocks(String query) throws IOException {
         StringBuilder urlDetails = new StringBuilder("https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?q=");
 
-        urlDetails.append(query).append("&region=US");
+        urlDetails.append(query).append("&region=DE");
 
         String jsonData = "";
 
@@ -173,6 +173,7 @@ public class YahooApiService {
                 .addHeader("x-rapidapi-key", "594cc31351mshee5d86395344b5ap11605fjsnb289c6caa8b5")
                 .addHeader("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
                 .build();
+
 
         Response response = client.newCall(request).execute();
 
