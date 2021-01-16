@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Diese Klasse benutzt das Selenium Framwork um einen Browser zu simulieren und zu bedienen, sodass Inernetseiten
+ * angesteuert werden können, um Kursziele zu extrahieren und nutzbar zu machen.
+ */
 public class SeleniumService {
 
     private final ArrayList<String> fetchedLines;
@@ -20,20 +24,29 @@ public class SeleniumService {
     private final ChromeOptions options;
     private final WebDriverWait wait;
 
+    /**
+     * Standard Konstruktor, um das Selenium Framework  zu iniitieren.
+     */
     public SeleniumService() {
         this.fetchedLines = new ArrayList<>();
         this.options = new ChromeOptions();
-        this.options.addArguments("--headless","--allow-insecure-content");
+        this.options.addArguments("--headless", "--allow-insecure-content");
         this.options.addArguments("--start-maximized");
         this.options.addArguments("--ignore-certificate-errors");
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         this.chrome1 = new ChromeDriver(options)
-;
+        ;
 
         this.wait = new WebDriverWait(chrome1, 30);
     }
 
-
+    /**
+     * Methode, um die Seite mit den Kurszielen anzusteuern mithilfe des Selenium Frameworks.
+     *
+     * @param symbol Aktiensymbol als String
+     * @return Gibt einen Link zurück mit den gesuchten Kurszielen
+     * @throws InterruptedException Falls es Unterbrechungen beim Crawlen gibt
+     */
     private String getAnalytisSite(String symbol) throws InterruptedException {
 
         chrome1.navigate().to("https://www.finanztreff.de/suche/");
@@ -58,15 +71,14 @@ public class SeleniumService {
             new WebDriverWait(chrome1, 20).until(
                     ExpectedConditions.elementToBeClickable(By
                             .xpath("//*[@id=\"btn-reject\"]"))).click();
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
 
-        // Todo Datenschutz Iframe kommt nicht immer prüfen und dann verfahren (eventuell auch mit Cookiefenster?)
         try {
             chrome1.switchTo().parentFrame();
             inputfield.sendKeys(symbol);
             searchButton.click();
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
 
         String xpathBranche;
@@ -76,17 +88,17 @@ public class SeleniumService {
         List<WebElement> bodyelements = resultTable.findElements(By.xpath("//tbody/tr"));
         WebElement analyticLink = null;
 
-        for (int i =1; i<bodyelements.size()+1;i++){
-            xpathBranche ="//tbody/tr["+i+"]/td[4]";
-            xpathName ="//tbody/tr["+i+"]/td[3]/a";
+        for (int i = 1; i < bodyelements.size() + 1; i++) {
+            xpathBranche = "//tbody/tr[" + i + "]/td[4]";
+            xpathName = "//tbody/tr[" + i + "]/td[3]/a";
             WebElement checkBranche = resultTable.findElement(By.xpath(xpathBranche));
             String brancheText = checkBranche.getText();
             String camelCasePattern = "[A-Z][A-Z0-9\\s]+"; // 3rd edit, getting better
-            if(!brancheText.isEmpty()){
-                    analyticLink = resultTable.findElement(By.xpath(xpathName));
-                    break;
-            }else{
-                analyticLink= resultTable.findElement(By.tagName("a"));
+            if (!brancheText.isEmpty()) {
+                analyticLink = resultTable.findElement(By.xpath(xpathName));
+                break;
+            } else {
+                analyticLink = resultTable.findElement(By.tagName("a"));
             }
         }
 
@@ -102,12 +114,19 @@ public class SeleniumService {
         return chrome1.getCurrentUrl();
     }
 
-    public ArrayList<HashMap<String,String>> fetchAnalytics(String symbol) throws InterruptedException {
+    /**
+     * Methode, um mit der ermittelten Internetseite die Kursziele zu extrahieren.
+     *
+     * @param symbol Aktiensymbol als String
+     * @return Liste von Aktienzielinformationen als ArrayList
+     * @throws InterruptedException Falls Unterbrechungen passieren, während des Crawlen.
+     */
+    public ArrayList<HashMap<String, String>> fetchAnalytics(String symbol) throws InterruptedException {
         ArrayList<HashMap<String, String>> analytics = new ArrayList<>();
 
         try {
             chrome1.navigate().to(this.getAnalytisSite(symbol));
-        }catch (Exception e) {
+        } catch (Exception e) {
             chrome1.close();
         }
         String languagesParagraphXpath = "//*[@id=\"finanztreff\"]/div[6]/div/div[11]/div/table";
@@ -136,12 +155,12 @@ public class SeleniumService {
 
             HashMap<String, String> analytic = new HashMap<>();
 
-            analytic.put("name",name);
-            analytic.put("date",date);
-            analytic.put("rating",rating);
-            analytic.put("target",target);
-            analytic.put("targetTimeFrame",targetTimeFrame);
-            analytic.put("delta",delta);
+            analytic.put("name", name);
+            analytic.put("date", date);
+            analytic.put("rating", rating);
+            analytic.put("target", target);
+            analytic.put("targetTimeFrame", targetTimeFrame);
+            analytic.put("delta", delta);
 
             analytics.add(analytic);
 

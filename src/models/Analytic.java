@@ -1,10 +1,11 @@
 package models;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Klasse um ein Analyse Objekt zu halten und zu verwalten.
+ */
 public class Analytic {
     private StringProperty provider;
     private StringProperty publishedDate;
@@ -13,6 +14,15 @@ public class Analytic {
     private StringProperty rating;
     private StringProperty delta;
 
+    /**
+     * Standard Konstruktor
+     * @param provider Name des Analysehauses
+     * @param publishedDate Veröffentlichtes Datum der Analyse
+     * @param forcastTimeFrame Zeitrahmen der Prognose
+     * @param targeValue Zielwert der Analyse
+     * @param rating Allgemeine Bewertung der Aktie
+     * @param delta Abstand zum aktuellen Aktienwert in%
+     */
     public Analytic (String provider, String publishedDate,
                     String forcastTimeFrame, String targeValue, String rating, String delta) {
 

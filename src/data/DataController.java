@@ -8,13 +8,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import services.SeleniumService;
 import services.YahooApiService;
-import sun.awt.windows.WPrinterJob;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * Die DataController Klasse kümmert sich um die Verknüpftung der Daten mit den jeweiligen Datenmodellen. Sie ruft den
