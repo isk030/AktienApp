@@ -9,6 +9,7 @@ import javafx.stage.Stage;
  * AktienApp ist eine Applikation die aktuelle Aktienkurse für beliebe Finanzprodukte aus der Yahoo Finance Api abfragt
  * und dem User zur Verfügung stellt. Ferner können die Aktienkursverläufe in Diagrammen dargestellt werden für verschiedene Zeiträume.
  * Eine Speicherung von favorisierten Finanzprodukten ist auch möglich
+ *
  * @author Iskender Dilaver
  * @version 1.0
  */

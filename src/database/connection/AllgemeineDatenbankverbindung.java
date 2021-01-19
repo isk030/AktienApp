@@ -9,14 +9,13 @@ import java.util.ArrayList;
 public abstract class AllgemeineDatenbankverbindung {
 
     /**
+     * Liste aller erzeugten PreparedStatements
+     */
+    private final ArrayList<PreparedStatement> pstmtList;
+    /**
      * Connection-Objekt, welches die Datenbankverbindung enthält
      */
     protected Connection con;
-
-    /**
-     * Liste aller erzeugten PreparedStatements
-     */
-    private ArrayList<PreparedStatement> pstmtList;
 
     /**
      * Konstruktor

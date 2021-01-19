@@ -119,9 +119,9 @@ public class YahooApiService {
      * Methode um mit dem OKHTTP Client die Yahoo Finance API anzusprechen, um gewünschte Aktiendetails in einer Aktienliste
      * als JsonObject zu erstellen.
      *
-     * @param symbol Aktienamenkürzel nach amerikanischem Standard als String
+     * @param symbol    Aktienamenkürzel nach amerikanischem Standard als String
      * @param timeframe Zeitabschnitt als String
-     * @param interval Zeitinterval als String
+     * @param interval  Zeitinterval als String
      * @throws IOException Fehlerhafte Parameter geben eine IOException aus
      */
     public void fetchDetails(String symbol, String timeframe, String interval) throws IOException {

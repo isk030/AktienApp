@@ -13,9 +13,9 @@ import java.util.Objects;
  */
 public class Stock {
 
-    private StringProperty symbol;
-    private StringProperty stockName;
-    private StringProperty stockCurrency;
+    private final StringProperty symbol;
+    private final StringProperty stockName;
+    private final StringProperty stockCurrency;
     private DoubleProperty actualValue;
     private DoubleProperty changePercent;
     private ArrayList<Integer> timpestampSet;

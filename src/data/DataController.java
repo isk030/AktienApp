@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import services.SeleniumService;
 import services.YahooApiService;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +21,8 @@ import java.util.Objects;
 public class DataController {
 
     private static DataController singletonDataController = null;
+    private final ArrayList<String> queryResults;
     private StockList stockList;
-    private ArrayList<String> queryResults;
     private SeleniumService seleniumService;
 
     /**
@@ -86,7 +85,6 @@ public class DataController {
             try {
                 stockList.add(new Stock(el.getString("symbol"), el.getString("shortName"), el.getDouble("regularMarketPrice"), el.getString("currency"), el.getDouble("regularMarketChangePercent")));
             } catch (JSONException e) {
-                System.out.println(e.getClass() + el.getString("symbol"));
             }
 
 
@@ -131,15 +129,15 @@ public class DataController {
     }
 
     public void getAnalytics(Stock stock) throws InterruptedException {
-            String cleanName=null;
-            this.seleniumService = new SeleniumService();
-            try{
-                cleanName = stock.getStockName().substring(0,stock.getStockName().indexOf(" "));
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            ArrayList<HashMap<String, String>> analyticsList = this.seleniumService.fetchAnalytics(cleanName);
-            this.mapAnalyticsIntoModel(analyticsList, stock);
+        String cleanName = null;
+        this.seleniumService = new SeleniumService();
+        try {
+            cleanName = stock.getStockName().substring(0, stock.getStockName().indexOf(" "));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ArrayList<HashMap<String, String>> analyticsList = this.seleniumService.fetchAnalytics(cleanName);
+        this.mapAnalyticsIntoModel(analyticsList, stock);
     }
 
     public void mapAnalyticsIntoModel(ArrayList<HashMap<String, String>> analyticsList, Stock stock) {

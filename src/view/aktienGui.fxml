@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="1471.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GuiController">
-   <Pane layoutX="15.0" layoutY="19.0" prefHeight="481.0" prefWidth="1531.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="19.0">
-      <VBox alignment="CENTER" layoutX="388.0" layoutY="54.0" prefHeight="137.0" prefWidth="132.0" spacing="150.0">
-         <children>
-            <Button fx:id="btnFavs" mnemonicParsing="false" onAction="#addToFavs" prefHeight="0.0" prefWidth="125.0" text="Als Favorit speichern" />
-            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteFav" text="Aus Favoriten löschen" />
-         </children>
-      </VBox>
-      <TableView fx:id="tvStock" layoutY="55.0" prefHeight="417.0" prefWidth="379.0">
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-      <TextField fx:id="tfSearch" layoutX="7.0" layoutY="3.0" prefHeight="26.0" prefWidth="305.0" />
-      <Label layoutX="388.0" layoutY="264.0" prefHeight="44.0" prefWidth="108.0" text="Kurs für folgende Zeiträume zeichnen:" textAlignment="CENTER" wrapText="true" />
-      <Button fx:id="btnSearch" layoutX="318.0" layoutY="3.0" mnemonicParsing="false" onAction="#search" text="Suchen" />
-      <VBox alignment="CENTER" layoutX="409.0" layoutY="322.0" prefHeight="137.0" prefWidth="67.0" spacing="12.0">
-         <children>
-            <Button fx:id="btn6mo" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart6mo" prefWidth="200.0" text="6 Monate" />
-            <Button fx:id="btn1mo" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart1mo" prefWidth="200.0" text="1 Monat" />
-            <Button fx:id="btn1wk" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart1wk" prefWidth="200.0" text="1 Woche" />
-            <Button fx:id="btn1d" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart1d" prefWidth="200.0" text="1 Tag" />
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </VBox>
-      <TableView fx:id="tvStockFavs" layoutX="532.0" layoutY="55.0" prefHeight="417.0" prefWidth="320.0">
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-      <ProgressIndicator fx:id="pbMain" layoutX="410.0" layoutY="117.0" prefHeight="53.0" prefWidth="83.0" visible="false" />
-      <Label layoutX="144.0" layoutY="38.0" text="Suchergebnisse" />
-      <Label layoutX="640.0" layoutY="38.0" text="Favoriten" />
-      <TableView fx:id="tvAnalytics" layoutX="1000.0" layoutY="55.0" prefHeight="417.0" prefWidth="435.0">
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy></TableView>
-      <Label fx:id="lbAnalytics" layoutX="1169.0" layoutY="38.0" text="Analysen" />
-      <Button fx:id="btnTarget" layoutX="862.0" layoutY="228.0" mnemonicParsing="false" onAction="#getAnalytics" text="Kursziele anzeigen" />
-      <ProgressIndicator fx:id="pbTargets" layoutX="1402.0" layoutY="25.0" prefHeight="26.0" prefWidth="33.0" visible="false" />
-   </Pane>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="519.0" prefWidth="1471.0" xmlns="http://javafx.com/javafx/11.0.1"
+            fx:controller="view.GuiController">
+    <Pane layoutX="15.0" layoutY="19.0" prefHeight="481.0" prefWidth="1531.0" AnchorPane.leftAnchor="15.0"
+          AnchorPane.topAnchor="19.0">
+        <VBox alignment="CENTER" layoutX="388.0" layoutY="54.0" prefHeight="137.0" prefWidth="132.0" spacing="150.0">
+            <children>
+                <Button fx:id="btnFavs" mnemonicParsing="false" onAction="#addToFavs" prefHeight="0.0" prefWidth="125.0"
+                        text="Als Favorit speichern"/>
+                <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deleteFav" text="Aus Favoriten löschen"/>
+            </children>
+        </VBox>
+        <TableView fx:id="tvStock" layoutY="55.0" prefHeight="417.0" prefWidth="379.0">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+        <TextField fx:id="tfSearch" layoutX="7.0" layoutY="3.0" prefHeight="26.0" prefWidth="305.0"/>
+        <Label layoutX="388.0" layoutY="264.0" prefHeight="44.0" prefWidth="108.0"
+               text="Kurs für folgende Zeiträume zeichnen:" textAlignment="CENTER" wrapText="true"/>
+        <Button fx:id="btnSearch" layoutX="318.0" layoutY="3.0" mnemonicParsing="false" onAction="#search"
+                text="Suchen"/>
+        <VBox alignment="CENTER" layoutX="409.0" layoutY="322.0" prefHeight="137.0" prefWidth="67.0" spacing="12.0">
+            <children>
+                <Button fx:id="btn6mo" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart6mo"
+                        prefWidth="200.0" text="6 Monate"/>
+                <Button fx:id="btn1mo" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart1mo"
+                        prefWidth="200.0" text="1 Monat"/>
+                <Button fx:id="btn1wk" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart1wk"
+                        prefWidth="200.0" text="1 Woche"/>
+                <Button fx:id="btn1d" alignment="CENTER" mnemonicParsing="false" onAction="#drawChart1d"
+                        prefWidth="200.0" text="1 Tag"/>
+            </children>
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+        </VBox>
+        <TableView fx:id="tvStockFavs" layoutX="532.0" layoutY="55.0" prefHeight="417.0" prefWidth="320.0">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+        <ProgressIndicator fx:id="pbMain" layoutX="410.0" layoutY="117.0" prefHeight="53.0" prefWidth="83.0"
+                           visible="false"/>
+        <Label layoutX="144.0" layoutY="38.0" text="Suchergebnisse"/>
+        <Label layoutX="640.0" layoutY="38.0" text="Favoriten"/>
+        <TableView fx:id="tvAnalytics" layoutX="1000.0" layoutY="55.0" prefHeight="417.0" prefWidth="435.0">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+        <Label fx:id="lbAnalytics" layoutX="1169.0" layoutY="38.0" text="Analysen"/>
+        <Button fx:id="btnTarget" layoutX="862.0" layoutY="228.0" mnemonicParsing="false" onAction="#getAnalytics"
+                text="Kursziele anzeigen"/>
+        <ProgressIndicator fx:id="pbTargets" layoutX="1402.0" layoutY="25.0" prefHeight="26.0" prefWidth="33.0"
+                           visible="false"/>
+    </Pane>
 </AnchorPane>

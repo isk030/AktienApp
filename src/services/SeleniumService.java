@@ -30,7 +30,7 @@ public class SeleniumService {
     public SeleniumService() {
         this.fetchedLines = new ArrayList<>();
         this.options = new ChromeOptions();
-        this.options.addArguments("--headless", "--allow-insecure-content");
+        this.options.addArguments("--allow-insecure-content");
         this.options.addArguments("--start-maximized");
         this.options.addArguments("--ignore-certificate-errors");
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
@@ -164,7 +164,6 @@ public class SeleniumService {
 
             analytics.add(analytic);
 
-            //System.out.println(name);
         }
         chrome1.close();
         return analytics;

@@ -19,13 +19,10 @@ import models.Analytic;
 import models.Stock;
 import models.StockList;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -84,7 +81,6 @@ public class GuiController {
 
     @FXML
     private ProgressIndicator pbTargets;
-
 
 
     /**
@@ -253,6 +249,7 @@ public class GuiController {
 
         pbMain.setVisible(true);
         tvStockFavs.setDisable(true);
+
         Task<Void> getFavListActualData = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -340,7 +337,7 @@ public class GuiController {
             @Override
             protected Void call() throws Exception {
 
-                    DataController.getInstance().getAnalytics(stock);
+                DataController.getInstance().getAnalytics(stock);
 
 
                 tableAnalyticsData.addAll(stock.getAnalytics());
@@ -365,13 +362,9 @@ public class GuiController {
 
         getTargetResults.setOnSucceeded((WorkerStateEvent event) -> {
             pbTargets.setVisible(false);
-            lbAnalytics.setText("Analysen über: "+stock.getStockName());
+            lbAnalytics.setText("Analysen über: " + stock.getStockName());
         });
         new Thread(getTargetResults).start();
-
-
-
-
 
 
     }
@@ -508,7 +501,6 @@ public class GuiController {
             lineChart.setAnimated(false);
 
 
-
             Scene scene = new Scene(lineChart, 800, 600);
             lineChart.getData().add(series);
 
@@ -522,12 +514,11 @@ public class GuiController {
                     targetTimeFrame = tableAnalyticsData.get(0).getForcastTimeFrame();
                 } catch (NumberFormatException | ParseException e) {
                     recentTarget = null;
-                    targetTimeFrame =  null;
-                    System.out.println("letzte Bewertung hat keinen Wert");
+                    targetTimeFrame = null;
                 }
 
                 XYChart.Series series1 = new XYChart.Series();
-                series1.getData().add(new XYChart.Data("in "+targetTimeFrame , recentTarget));
+                series1.getData().add(new XYChart.Data("in " + targetTimeFrame, recentTarget));
                 series1.setName("aktuellstes Kursziel");
                 lineChart.getData().add(series1);
             }
